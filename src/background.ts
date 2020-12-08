@@ -20,7 +20,7 @@ protocol.registerSchemesAsPrivileged([
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 800,
+    width: 1200,
     height: 600,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
@@ -43,7 +43,7 @@ function createWindow() {
 
   win.webContents.on("did-finish-load", () => {    
     const{ title , version} = require('../package.json')          
-    win.setTitle(`${title} v ${version}`),
+    win.setTitle(`${title} :: ${version}`)
     win.setMenu(null)
   });
 
