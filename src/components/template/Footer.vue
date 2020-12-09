@@ -1,5 +1,5 @@
 <template>
-    <footer class="footer">
+    <footer class="rodape">
         <span> {{status}}  | <strong> {{sessionStatus}} </strong> | <strong> {{version}}</strong> </span>
     </footer>
 </template>
@@ -17,8 +17,8 @@ export default {
 </script>
 
 <style>
-    .footer{
-        grid-area: footer;
+    .rodape{
+        grid-area: rodape;
         background-color: #ddd;
         color: #333;
         display: flex;

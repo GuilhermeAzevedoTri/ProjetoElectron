@@ -42,9 +42,11 @@ function createWindow() {
   }
 
   win.webContents.on("did-finish-load", () => {    
-    const{ title , version} = require('../package.json')          
-    win.setTitle(`${title} :: ${version}`)
-    win.setMenu(null)
+    const{ title , version} = require('../package.json')         
+    if(win != null){
+      win.setTitle(`${title} :: ${version}`)
+      win.setMenu(null)
+    }
   });
 
   win.on("closed", () => {
