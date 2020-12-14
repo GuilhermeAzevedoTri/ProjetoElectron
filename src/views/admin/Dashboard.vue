@@ -1,7 +1,7 @@
 <template>
     <div class="admin-pages">     
         <section>
-        <b-tabs type="is-boxed">
+        <b-tabs type="is-toggle" position="is-centered" class="block">
             <b-tab-item label="Account" icon="file">
                 <Account />
             </b-tab-item>

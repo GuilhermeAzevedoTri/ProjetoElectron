@@ -9,7 +9,8 @@ export default new Vuex.Store({
       name : 'Usuario Mock',
       email: 'mock@cod3r.com.br',
       admin: true
-    }
+    },
+    session: false,
   },
   mutations: {},
   actions: {},
