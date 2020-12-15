@@ -8,11 +8,17 @@ import vuetify from "./plugins/vuetify"
 import './config/axios.js';
 import './config/bootstrap.js';
 import './config/buefy.js';
+import './config/msgs.js';
+import './config/msgsPrimeVue.js';
+
+import 'primevue/resources/themes/saga-blue/theme.css'       //theme
+import 'primevue/resources/primevue.min.css'                 //core css
 
 
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {fas} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
+import { app } from 'electron';
 
 library.add(fas)
 Vue.component('font-awesome-icon', FontAwesomeIcon)

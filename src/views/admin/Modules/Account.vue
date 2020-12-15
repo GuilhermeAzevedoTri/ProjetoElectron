@@ -44,21 +44,27 @@
           </Tree>
         </div>
       </div>
+      
+      <div class="column" v-if="showContent">
+        <div class="titulo">
+          <h3>{{ machine.machineGroup }}</h3>
+        </div>
 
-      <div class="column">
-        <h3>{{ machine.machineGroup }}</h3>
-        <p>
-          <br />
-          <button @click="getTreeData2">Botão</button>
-          <ul>
-            <li v-for="id in treeData1.items" :key="id">{{ id }}</li>
-          </ul>
+        <div class="subTitulo">
           <span>{{ machine.data }}</span>
-          <br />
-          <span>{{ machine.name }}</span>
-          <br />
-          <span>{{ machine.ip }}</span>
-        </p>
+        </div>
+
+        <br />
+        <div class="menu">
+          <div class="menu1">
+            <span>Name: {{ machine.name }}</span>
+          </div>
+          <div class="menu2">
+            <span>IP: {{ machine.ip }}</span>
+          </div>
+        </div>        
+        <br />
+        
       </div>
     </div>
   </div>
@@ -66,8 +72,10 @@
 <script>
 import { mapState } from "vuex";
 import Tree from "liquor-tree";
-import { baseApiUrl } from "@/global.js";
+import { baseApiUrl, showError } from "@/global.js";
 import axios from "axios";
+import Toast from 'primevue/toast';
+
 export default {
   name: "Account",
   components: { Tree },
@@ -78,6 +86,7 @@ export default {
       ip: "",
       treeFilter: "",
       treeData: this.getTreeData(),
+      showContent: false,
       treeData1: {},
       treeOptions: {
         propertyNames: { text: "name" },
@@ -141,14 +150,15 @@ export default {
     },
 
     getTreeData2() {
+      debugger;
+      this.$toast.add({severity:'success', summary: 'Success Message', detail:'Order submitted', life: 3000})
       const url =
-        "https://api.github.com/search/repositories?q=language%3AJava&sort=stars&page=1"; //`${baseApiUrl}/rest/restConfig/getEngine/2/0`
+        `${baseApiUrl}/rest/restConfig/getEngine/2/0`
       debugger;
       axios.get(url).then((res) => {
         debugger;
         this.treeData1 = res.data;
-        alert(res.status);
-      });
+      }).catch(showError);
     },
 
     onNodeSelect(node) {
@@ -163,19 +173,21 @@ export default {
       */
       const treeData = this.getTreeData();
       this.machine = {};
+      this.showContent = false;
       treeData.forEach((group) => {
         group.children.forEach((machine) => {
           if (machine.id == node.id) {
+            this.showContent = true;
             this.machine.machineGroup = group.name;
             this.machine.data = group.name + " Data";
             const split = machine.name.split("(");
-            this.machine.name = "Name: " + split[0];
-            this.machine.ip = "Ip: " + split[1].replace(/[)]+/g, "");
+            this.machine.name = split[0];
+            this.machine.ip = split[1].replace(/[)]+/g, "");
           }
         });
       });
     },
-    getStyle(node) {      
+    getStyle(node) {
       let style = "";
 
       const treeData = this.getTreeData();
@@ -208,105 +220,6 @@ export default {
 };
 </script>
 
-<style scoped>
-* {
-  box-sizing: border-box;
-}
+<style scoped src="@/css/styleModules.css">
 
-body {
-  margin: 0;
-}
-
-/* Style the top navigation bar */
-.topnav {
-  overflow: hidden;
-  background-color: #333;
-}
-
-/* Style the topnav links */
-.topnav a {
-  float: left;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-/* Change color on hover */
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
-}
-
-/* Create three equal columns that floats next to each other */
-.columnMenu {
-  float: left;
-  width: 33.33%;
-  padding: 15px;
-}
-.column {
-  float: left;
-  width: 33.33%;
-  padding: 15px;
-}
-
-/* Clear floats after the columns */
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
-@media screen and (max-width: 600px) {
-  .column {
-    width: 100%;
-  }
-}
-
-.menu a,
-.menu a:hover {
-  color: #fff;
-  text-decoration: none;
-}
-
-.menu .tree-node.selected > .tree-content,
-.menu .tree-node .tree-content:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-.tree-arrow.has-child {
-  filter: brightness(2);
-}
-
-.menu .menu-filter {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  margin: 20px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #aaa;
-}
-
-.menu .menu-filter i {
-  color: #aaa;
-  margin-right: 10px;
-}
-
-.menu input {
-  color: #ccc;
-  font-size: 1.3rem;
-  border: 0;
-  outline: 0;
-  width: 100%;
-  background: transparent;
-}
-
-.tree-filter-empty {
-  color: #ccc;
-  font-size: 1.3rem;
-  margin-left: 20px;
-}
 </style>

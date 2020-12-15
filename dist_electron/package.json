@@ -25,6 +25,8 @@
     "core-js": "^3.6.5",
     "font-awesome": "^4.7.0",
     "liquor-tree": "^0.2.70",
+    "mitt": "^2.1.0",
+    "primevue": "^2.2.3",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.11",
     "vue-gravatar": "^1.3.1",
