@@ -26,11 +26,8 @@
             <b-tab-item label="Configurations" icon="cog">
                 <Configurations />
             </b-tab-item>
-
         </b-tabs>        
-    </section>
-    
-
+    </section>    
         
     </div>
 </template>

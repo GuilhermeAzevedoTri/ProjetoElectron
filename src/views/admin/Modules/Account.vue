@@ -27,18 +27,17 @@
           <!--<Tree :data="treeData" :options="treeOptions" :filter="treeFilter" ref="tree" >
             <span>{{node.text}}</span>
           </Tree>                                           -->
-           <Tree :data="treeData" :options="treeOptions" :filter="treeFilter" ref="tree" >
+          <Tree :data="treeData" :options="treeOptions" :filter="treeFilter" ref="tree">
             <span class="tree-text" slot-scope="{ node }">
               <template v-if="!node.hasChildren()">
-                
                 <!--<i :class="[getStyle(node)]"></i>                             -->
-                 <font-awesome-icon :icon="['fas', getStyle(node)]"/> 
-                {{ node.text }} 
+                <font-awesome-icon :icon="['fas', getStyle(node)]" />
+                {{ node.text }}
               </template>
 
               <template v-else>
                 <!--<i :class="[getStyle(node)]"></i>                                -->
-                 <font-awesome-icon :icon="['fas', getStyle(node)]"/> 
+                <font-awesome-icon :icon="['fas', getStyle(node)]" />
                 {{ node.text }}
               </template>
             </span>
@@ -47,13 +46,17 @@
       </div>
 
       <div class="column">
-        <h3>{{machine.machineGroup}}</h3>
+        <h3>{{ machine.machineGroup }}</h3>
         <p>
-          <br/>
-          <span>{{machine.data}}</span>
-          <br/>
+          <br />
+          <button @click="getTreeData2">Botão</button>
+          <ul>
+            <li v-for="id in treeData1.items" :key="id">{{ id }}</li>
+          </ul>
+          <span>{{ machine.data }}</span>
+          <br />
           <span>{{ machine.name }}</span>
-          <br/>
+          <br />
           <span>{{ machine.ip }}</span>
         </p>
       </div>
@@ -74,36 +77,37 @@ export default {
       name: "",
       ip: "",
       treeFilter: "",
-      treeData: this.getTreeData(),     
+      treeData: this.getTreeData(),
+      treeData1: {},
       treeOptions: {
-        propertyNames: { text: "name",  },
+        propertyNames: { text: "name" },
         filter: { emptyText: "Categoria não encontrada" },
       },
-      machine:{
+      machine: {
         machineGroup: "",
-        data : "",
-        name : "",
-        ip: ""      
-      }
+        data: "",
+        name: "",
+        ip: "",
+      },
     };
   },
   methods: {
     getTreeData() {
-      const url = `${baseApiUrl}/categories/tree`; //Exemplo
+      //const url = `${baseApiUrl}/rest/restConfig/getEngine/2/0`; //Exemplo
       return [
         {
           id: 1,
           name: "Game Terminals",
           parentId: null,
           connect: true,
-          state: { expanded: false, visible: true, disabled: false, },
+          state: { expanded: false, visible: true, disabled: false },
           children: [
             {
               id: 3,
-              name: "Teste (192.168.40.59)",              
+              name: "Teste (192.168.40.59)",
               parentId: 1,
               connect: true,
-              state: { expanded: false, visible: true, false: true, },
+              state: { expanded: false, visible: true, false: true },
               children: [],
             },
           ],
@@ -113,32 +117,40 @@ export default {
           name: "Cashiers",
           parentId: null,
           connect: false,
-          state: { expanded: false, visible: true, disabled: false, },
+          state: { expanded: false, visible: true, disabled: false },
           children: [
             {
               id: 4,
-              name: "Teste (192.168.40.177)",              
+              name: "Teste (192.168.40.177)",
               parentId: 2,
               connect: false,
-              state: { expanded: false, visible: true, disabled: false, },
+              state: { expanded: false, visible: true, disabled: false },
               children: [],
             },
             {
               id: 5,
-              name: "Teste (192.168.40.178)",              
+              name: "Teste (192.168.40.178)",
               parentId: 2,
               connect: true,
-              state: { expanded: false, visible: true, disabled: false, },
+              state: { expanded: false, visible: true, disabled: false },
               children: [],
             },
           ],
         },
-        
-        
       ];
-      //return axios.get(url).then(res => res.data)
     },
-   
+
+    getTreeData2() {
+      const url =
+        "https://api.github.com/search/repositories?q=language%3AJava&sort=stars&page=1"; //`${baseApiUrl}/rest/restConfig/getEngine/2/0`
+      debugger;
+      axios.get(url).then((res) => {
+        debugger;
+        this.treeData1 = res.data;
+        alert(res.status);
+      });
+    },
+
     onNodeSelect(node) {
       /*this.$router.push({
         name: "articlesByCategory",
@@ -148,51 +160,43 @@ export default {
       if (this.$mq === "xs" || this.$mq === "sm") {
         //this.$store.commit("toggleMenu", false);
       }
-      */         
-      const treeData = this.getTreeData()
-      this.machine = {}
-      treeData.forEach(group => {
-        group.children.forEach(machine => {
-          if(machine.id == node.id){
-            this.machine.machineGroup = group.name
-            this.machine.data = group.name + " Data"
-            const split = machine.name.split("(")
-            this.machine.name = "Name: " + split[0]
-            this.machine.ip = "Ip: " + split[1].replace(/[)]+/g, '');
+      */
+      const treeData = this.getTreeData();
+      this.machine = {};
+      treeData.forEach((group) => {
+        group.children.forEach((machine) => {
+          if (machine.id == node.id) {
+            this.machine.machineGroup = group.name;
+            this.machine.data = group.name + " Data";
+            const split = machine.name.split("(");
+            this.machine.name = "Name: " + split[0];
+            this.machine.ip = "Ip: " + split[1].replace(/[)]+/g, "");
+          }
+        });
+      });
+    },
+    getStyle(node) {      
+      let style = "";
 
-          }
-        })
-      })
-                
-  
-     
-    },   
-    getStyle(node){
-     // alert(node.id)
-      let style = '';
-      
-      const treeData = this.getTreeData()      
-      treeData.forEach(group => {
-        
-        group.children.forEach(machine => {
-          if(machine.id == node.id){
-            if(machine.connect){
-              style = 'video'              
-            }else{
-              style = 'video-slash'
-              
+      const treeData = this.getTreeData();
+      treeData.forEach((group) => {
+        group.children.forEach((machine) => {
+          if (machine.id == node.id) {
+            if (machine.connect) {
+              style = "video";
+            } else {
+              style = "video-slash";
             }
           }
-          
-        })
-        if(group.id == node.id){
-         if(group.connect){
-              style = 'plane'
-            }else{
-              style = 'plane-slash'
-            }
+        });
+        if (group.id == node.id) {
+          if (group.connect) {
+            style = "plane";
+          } else {
+            style = "plane-slash";
+          }
         }
-      })    
+      });
       return style;
     },
   },

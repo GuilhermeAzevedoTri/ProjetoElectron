@@ -1,1 +1,1 @@
-export const baseApiUrl = 'http://localhost:3000'
+export const baseApiUrl = 'https://srv-fbm-dev03.vivopro3928.cloudfabric.net/SystemConfigurator'//'http://localhost:3000'
